@@ -263,7 +263,7 @@ public final class Extension<T extends ExtendableMessage<?>, E>
       return tag - o.tag;
     }
     if (datatype != o.datatype) {
-      return datatype.value() - o.datatype.value();
+      return datatype.value - o.datatype.value;
     }
     if (label != o.label) {
       return label.value() - o.label.value();
@@ -286,7 +286,7 @@ public final class Extension<T extends ExtendableMessage<?>, E>
 
   @Override public int hashCode() {
     int hash = tag;
-    hash = hash * 37 + datatype.value();
+    hash = hash * 37 + datatype.value;
     hash = hash * 37 + label.value();
     hash = hash * 37 + extendedType.hashCode();
     hash = hash * 37 + (messageType != null ? messageType.hashCode() : 0);

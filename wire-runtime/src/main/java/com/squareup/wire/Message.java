@@ -42,14 +42,10 @@ public abstract class Message implements Serializable {
     MESSAGE(11), FIXED32(12), SFIXED32(13), FIXED64(14),
     SFIXED64(15), FLOAT(16), DOUBLE(17);
 
-    private final int value;
+    final int value;
 
     Datatype(int value) {
       this.value = value;
-    }
-
-    public int value() {
-      return value;
     }
 
     WireType wireType() {

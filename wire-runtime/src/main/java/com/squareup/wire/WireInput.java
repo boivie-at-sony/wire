@@ -334,7 +334,7 @@ final class WireInput {
       case LENGTH_DELIMITED: skip(readVarint32()); return false;
       case START_GROUP:
         skipGroup();
-        checkLastTagWas((tag & ~0x7) | WireType.END_GROUP.value());
+        checkLastTagWas((tag & ~0x7) | WireType.END_GROUP.value);
         return false;
       case END_GROUP:
         return true;

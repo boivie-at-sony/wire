@@ -39,13 +39,9 @@ enum WireType {
     }
   }
 
-  private final int value;
+  final int value;
 
   WireType(int value) {
     this.value = value;
-  }
-
-  public int value() {
-    return value;
   }
 }

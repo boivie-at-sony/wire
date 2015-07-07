@@ -149,7 +149,7 @@ public final class WireOutput {
 
   /** Makes a tag value given a field number and wire type. */
   public static int makeTag(int fieldNumber, WireType wireType) {
-    return (fieldNumber << WireType.TAG_TYPE_BITS) | wireType.value();
+    return (fieldNumber << WireType.TAG_TYPE_BITS) | wireType.value;
   }
 
   private final byte[] buffer;
