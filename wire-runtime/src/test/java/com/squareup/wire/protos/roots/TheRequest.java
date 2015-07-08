@@ -26,6 +26,16 @@ public final class TheRequest extends Message {
     return 0;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize();
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<TheRequest> {
     public Builder() {
     }

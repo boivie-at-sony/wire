@@ -37,6 +37,17 @@ public final class H extends Message {
     return result != 0 ? result : (hashCode = ef != null ? ef.hashCode() : 0);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (ef != null ? sizeOfMessage(1, ef) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<H> {
     public E.F ef;
 

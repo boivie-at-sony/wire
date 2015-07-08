@@ -50,6 +50,17 @@ public final class OneExtension extends ExtendableMessage<OneExtension> {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (id != null ? sizeOfString(1, id) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends ExtendableMessage.ExtendableBuilder<OneExtension> {
     public String id;
 

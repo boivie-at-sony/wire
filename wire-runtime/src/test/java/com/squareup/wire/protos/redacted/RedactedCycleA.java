@@ -37,6 +37,17 @@ public final class RedactedCycleA extends Message {
     return result != 0 ? result : (hashCode = b != null ? b.hashCode() : 0);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (b != null ? sizeOfMessage(1, b) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<RedactedCycleA> {
     public RedactedCycleB b;
 

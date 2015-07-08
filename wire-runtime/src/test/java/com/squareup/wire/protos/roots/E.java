@@ -54,6 +54,18 @@ public final class E extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (f != null ? sizeOfMessage(1, f) : 0)
+          + (g != null ? sizeOfEnum(2, g) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<E> {
     public F f;
 
@@ -116,6 +128,17 @@ public final class E extends Message {
     public int hashCode() {
       int result = hashCode;
       return result != 0 ? result : (hashCode = i != null ? i.hashCode() : 0);
+    }
+
+    @Override
+    public int size() {
+      int size = this.size;
+      if (size == -1) {
+        size = unknownFieldsSize()
+            + (i != null ? sizeOfInt32(1, i) : 0);
+      }
+      this.size = size;
+      return size;
     }
 
     public static final class Builder extends com.squareup.wire.Message.Builder<F> {

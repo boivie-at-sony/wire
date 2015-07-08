@@ -50,6 +50,17 @@ public final class I extends ExtendableMessage<I> {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (i != null ? sizeOfInt32(1, i) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends ExtendableMessage.ExtendableBuilder<I> {
     public Integer i;
 

@@ -77,7 +77,7 @@ final class WireOutput {
   }
 
   /** Compute the number of bytes that would be needed to encode a tag. */
-  static int varintTagSize(int tag) {
+  static int tagSize(int tag) {
     return varint32Size(makeTag(tag, WireType.VARINT));
   }
 
@@ -91,6 +91,10 @@ final class WireOutput {
     if ((value & (0xffffffff << 21)) == 0) return 3;
     if ((value & (0xffffffff << 28)) == 0) return 4;
     return 5;
+  }
+
+  static int varint32ZigZagSize(int value) {
+    return varint32Size(zigZag32(value));
   }
 
   /** Compute the number of bytes that would be needed to encode a varint. */
@@ -107,6 +111,10 @@ final class WireOutput {
     return 10;
   }
 
+  static int varint64ZigZagSize(long value) {
+    return varint64Size(zigZag64(value));
+  }
+
   /**
    * Encode a ZigZag-encoded 32-bit value. ZigZag encodes signed integers into values that can be
    * efficiently encoded with varint. (Otherwise, negative values must be sign-extended to 64 bits
@@ -116,7 +124,7 @@ final class WireOutput {
    * @return An unsigned 32-bit integer, stored in a signed int because Java has no explicit
    * unsigned support.
    */
-  static int zigZag32(int n) {
+  private static int zigZag32(int n) {
     // Note:  the right-shift must be arithmetic
     return (n << 1) ^ (n >> 31);
   }
@@ -130,7 +138,7 @@ final class WireOutput {
    * @return An unsigned 64-bit integer, stored in a signed int because Java has no explicit
    * unsigned support.
    */
-  static long zigZag64(long n) {
+  private static long zigZag64(long n) {
     // Note:  the right-shift must be arithmetic
     return (n << 1) ^ (n >> 63);
   }
@@ -180,6 +188,10 @@ final class WireOutput {
     }
   }
 
+  void writeVarint32ZigZag(int value) throws IOException {
+    writeVarint32(zigZag32(value));
+  }
+
   /** Encode and write a varint. */
   void writeVarint64(long value) throws IOException {
     while (true) {
@@ -191,6 +203,10 @@ final class WireOutput {
         value >>>= 7;
       }
     }
+  }
+
+  void writeVarint64ZigZag(long value) throws IOException {
+    writeVarint64(zigZag64(value));
   }
 
   /** Write a little-endian 32-bit integer. */

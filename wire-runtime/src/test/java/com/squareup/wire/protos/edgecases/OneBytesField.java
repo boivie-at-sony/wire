@@ -41,6 +41,17 @@ public final class OneBytesField extends Message {
     return result != 0 ? result : (hashCode = opt_bytes != null ? opt_bytes.hashCode() : 0);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (opt_bytes != null ? sizeOfBytes(1, opt_bytes) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<OneBytesField> {
     public ByteString opt_bytes;
 

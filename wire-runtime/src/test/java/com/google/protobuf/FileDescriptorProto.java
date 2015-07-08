@@ -146,6 +146,25 @@ public final class FileDescriptorProto extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (name != null ? sizeOfString(1, name) : 0)
+          + (package != null ? sizeOfString(2, package) : 0)
+          + sizeOfRepeatedString(3, dependency)
+          + sizeOfRepeatedMessage(4, message_type)
+          + sizeOfRepeatedMessage(5, enum_type)
+          + sizeOfRepeatedMessage(6, service)
+          + sizeOfRepeatedMessage(7, extension)
+          + (options != null ? sizeOfMessage(8, options) : 0)
+          + (source_code_info != null ? sizeOfMessage(9, source_code_info) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<FileDescriptorProto> {
     public String name;
 

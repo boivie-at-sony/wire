@@ -101,6 +101,19 @@ public final class MessageOptions extends ExtendableMessage<MessageOptions> {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (message_set_wire_format != null ? sizeOfBool(1, message_set_wire_format) : 0)
+          + (no_standard_descriptor_accessor != null ? sizeOfBool(2, no_standard_descriptor_accessor) : 0)
+          + sizeOfRepeatedMessage(999, uninterpreted_option);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends ExtendableMessage.ExtendableBuilder<MessageOptions> {
     public Boolean message_set_wire_format;
 

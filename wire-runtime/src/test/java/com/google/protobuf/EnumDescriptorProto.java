@@ -83,6 +83,20 @@ public final class EnumDescriptorProto extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (name != null ? sizeOfString(1, name) : 0)
+          + (doc != null ? sizeOfString(4, doc) : 0)
+          + sizeOfRepeatedMessage(2, value)
+          + (options != null ? sizeOfMessage(3, options) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<EnumDescriptorProto> {
     public String name;
 

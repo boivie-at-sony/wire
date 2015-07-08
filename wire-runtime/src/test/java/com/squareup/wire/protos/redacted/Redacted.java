@@ -78,6 +78,19 @@ public final class Redacted extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (a != null ? sizeOfString(1, a) : 0)
+          + (b != null ? sizeOfString(2, b) : 0)
+          + (c != null ? sizeOfString(3, c) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<Redacted> {
     public String a;
 

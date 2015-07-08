@@ -49,7 +49,7 @@ final class UnknownFieldMap {
       return new LengthDelimitedFieldValue(tag, value);
     }
 
-    public abstract int getSerializedSize();
+    public abstract int size();
 
     public abstract void write(int tag, WireOutput output) throws IOException;
 
@@ -82,7 +82,7 @@ final class UnknownFieldMap {
       this.value = value;
     }
 
-    @Override public int getSerializedSize() {
+    @Override public int size() {
       return WireOutput.varint64Size(value);
     }
 
@@ -104,7 +104,7 @@ final class UnknownFieldMap {
       this.value = value;
     }
 
-    @Override public int getSerializedSize() {
+    @Override public int size() {
       return WireType.FIXED_32_SIZE;
     }
 
@@ -126,7 +126,7 @@ final class UnknownFieldMap {
       this.value = value;
     }
 
-    @Override public int getSerializedSize() {
+    @Override public int size() {
       return WireType.FIXED_64_SIZE;
     }
 
@@ -148,7 +148,7 @@ final class UnknownFieldMap {
       this.value = value;
     }
 
-    @Override public int getSerializedSize() {
+    @Override public int size() {
       return WireOutput.varint32Size(value.size()) + value.size();
     }
 
@@ -227,13 +227,13 @@ final class UnknownFieldMap {
     values.add(fieldValue);
   }
 
-  int getSerializedSize() {
+  int size() {
     int size = 0;
     if (fieldMap != null) {
       for (Map.Entry<Integer, List<FieldValue>> entry : fieldMap.entrySet()) {
         for (FieldValue value : entry.getValue()) {
-          size += WireOutput.varintTagSize(entry.getKey());
-          size += value.getSerializedSize();
+          size += WireOutput.tagSize(entry.getKey());
+          size += value.size();
         }
       }
     }

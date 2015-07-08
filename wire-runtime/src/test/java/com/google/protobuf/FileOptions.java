@@ -210,6 +210,25 @@ public final class FileOptions extends ExtendableMessage<FileOptions> {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (java_package != null ? sizeOfString(1, java_package) : 0)
+          + (java_outer_classname != null ? sizeOfString(8, java_outer_classname) : 0)
+          + (java_multiple_files != null ? sizeOfBool(10, java_multiple_files) : 0)
+          + (java_generate_equals_and_hash != null ? sizeOfBool(20, java_generate_equals_and_hash) : 0)
+          + (optimize_for != null ? sizeOfEnum(9, optimize_for) : 0)
+          + (cc_generic_services != null ? sizeOfBool(16, cc_generic_services) : 0)
+          + (java_generic_services != null ? sizeOfBool(17, java_generic_services) : 0)
+          + (py_generic_services != null ? sizeOfBool(18, py_generic_services) : 0)
+          + sizeOfRepeatedMessage(999, uninterpreted_option);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends ExtendableMessage.ExtendableBuilder<FileOptions> {
     public String java_package;
 

@@ -129,6 +129,23 @@ public final class UninterpretedOption extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + sizeOfRepeatedMessage(2, name)
+          + (identifier_value != null ? sizeOfString(3, identifier_value) : 0)
+          + (positive_int_value != null ? sizeOfUint64(4, positive_int_value) : 0)
+          + (negative_int_value != null ? sizeOfInt64(5, negative_int_value) : 0)
+          + (double_value != null ? sizeOfDouble(6, double_value) : 0)
+          + (string_value != null ? sizeOfBytes(7, string_value) : 0)
+          + (aggregate_value != null ? sizeOfString(8, aggregate_value) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<UninterpretedOption> {
     public List<NamePart> name = Collections.emptyList();
 
@@ -260,6 +277,18 @@ public final class UninterpretedOption extends Message {
         hashCode = result;
       }
       return result;
+    }
+
+    @Override
+    public int size() {
+      int size = this.size;
+      if (size == -1) {
+        size = unknownFieldsSize()
+            + sizeOfString(1, name_part)
+            + sizeOfBool(2, is_extension);
+      }
+      this.size = size;
+      return size;
     }
 
     public static final class Builder extends com.squareup.wire.Message.Builder<NamePart> {

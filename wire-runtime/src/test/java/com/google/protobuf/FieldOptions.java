@@ -132,6 +132,21 @@ public final class FieldOptions extends ExtendableMessage<FieldOptions> {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (ctype != null ? sizeOfEnum(1, ctype) : 0)
+          + (packed != null ? sizeOfBool(2, packed) : 0)
+          + (deprecated != null ? sizeOfBool(3, deprecated) : 0)
+          + (experimental_map_key != null ? sizeOfString(9, experimental_map_key) : 0)
+          + sizeOfRepeatedMessage(999, uninterpreted_option);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends ExtendableMessage.ExtendableBuilder<FieldOptions> {
     public CType ctype;
 

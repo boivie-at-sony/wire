@@ -38,6 +38,17 @@ public final class Foo extends Message {
     return result != 0 ? result : (hashCode = moo != null ? moo.hashCode() : 0);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (moo != null ? sizeOfMessage(1, moo) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<Foo> {
     public Bar.Baz.Moo moo;
 

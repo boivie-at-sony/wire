@@ -97,6 +97,21 @@ public final class MethodDescriptorProto extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (name != null ? sizeOfString(1, name) : 0)
+          + (doc != null ? sizeOfString(5, doc) : 0)
+          + (input_type != null ? sizeOfString(2, input_type) : 0)
+          + (output_type != null ? sizeOfString(3, output_type) : 0)
+          + (options != null ? sizeOfMessage(4, options) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<MethodDescriptorProto> {
     public String name;
 

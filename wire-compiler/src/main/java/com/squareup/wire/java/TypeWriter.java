@@ -231,6 +231,7 @@ public final class TypeWriter {
     builder.addMethod(messageBuilderConstructor(type, builderJavaType));
     builder.addMethod(messageEquals(type));
     builder.addMethod(messageHashCode(type));
+    builder.addMethod(messageSize(type));
     builder.addType(builder(type, javaType, builderJavaType));
 
     for (Type nestedType : type.nestedTypes()) {
@@ -239,7 +240,6 @@ public final class TypeWriter {
 
     return builder.build();
   }
-
 
   // Example:
   //
@@ -504,6 +504,67 @@ public final class TypeWriter {
     result.addStatement("hashCode = result");
     result.endControlFlow();
     result.addStatement("return result");
+    return result.build();
+  }
+
+  // Example:
+  //
+  // @Override
+  // protected int size() {
+  //   int size = this.size;
+  //   if (size == 1) {
+  //     size = unknownFieldsSize()
+  //         + (opt_int32 != null ? sizeOfInt32(1, opt_int32) : 0)
+  //         + sizeOfInt32(2, req_int32);
+  //   }
+  //   this.size = size;
+  //   return size;
+  // }
+  //
+  private MethodSpec messageSize(MessageType type) {
+    MethodSpec.Builder result = MethodSpec.methodBuilder("size")
+        .addAnnotation(Override.class)
+        .addModifiers(PUBLIC)
+        .returns(int.class);
+    result.addStatement("int size = this.size");
+    result.beginControlFlow("if (size == -1)");
+
+    CodeBlock.Builder expression = CodeBlock.builder()
+        .add("unknownFieldsSize()");
+
+    ImmutableList<Field> fields = type.fields();
+    for (Field field : fields) {
+      expression.add("\n+ ");
+
+      Type.Name fieldType = field.type();
+
+      String method;
+      if (fieldType.isScalar()) {
+        String typeString = fieldType.toString();
+        method = Character.toUpperCase(typeString.charAt(0)) + typeString.substring(1);
+      } else if (javaGenerator.isEnum(fieldType)) {
+        method = "Enum";
+      } else {
+        method = "Message";
+      }
+
+      if (field.isRepeated() && !field.isPacked()) {
+        expression.add("sizeOfRepeated$L($L, $N)", method, field.tag(), field.name());
+      } else {
+        if (field.isPacked()) {
+          expression.add("sizeOfPacked$L($L, $N)", method, field.tag(), field.name());
+        } else if (field.isRequired()) {
+          expression.add("sizeOf$L($L, $N)", method, field.tag(), field.name());
+        } else {
+          expression.add("($3N != null ? sizeOf$1L($2L, $3N) : 0)", method, field.tag(), field.name());
+        }
+      }
+    }
+    result.addStatement("size = $L", expression.build());
+
+    result.endControlFlow();
+    result.addStatement("this.size = size");
+    result.addStatement("return size");
     return result.build();
   }
 

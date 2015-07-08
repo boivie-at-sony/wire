@@ -93,6 +93,17 @@ public final class SourceCodeInfo extends Message {
     return result != 0 ? result : (hashCode = location != null ? location.hashCode() : 1);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + sizeOfRepeatedMessage(1, location);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<SourceCodeInfo> {
     public List<Location> location = Collections.emptyList();
 
@@ -238,6 +249,18 @@ public final class SourceCodeInfo extends Message {
         hashCode = result;
       }
       return result;
+    }
+
+    @Override
+    public int size() {
+      int size = this.size;
+      if (size == -1) {
+        size = unknownFieldsSize()
+            + sizeOfPackedInt32(1, path)
+            + sizeOfPackedInt32(2, span);
+      }
+      this.size = size;
+      return size;
     }
 
     public static final class Builder extends com.squareup.wire.Message.Builder<Location> {

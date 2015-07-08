@@ -57,6 +57,18 @@ public final class RepeatedAndPacked extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + sizeOfRepeatedInt32(201, rep_int32)
+          + sizeOfPackedInt32(301, pack_int32);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<RepeatedAndPacked> {
     public List<Integer> rep_int32 = Collections.emptyList();
 

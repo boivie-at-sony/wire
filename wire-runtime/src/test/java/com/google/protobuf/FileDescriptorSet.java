@@ -45,6 +45,17 @@ public final class FileDescriptorSet extends Message {
     return result != 0 ? result : (hashCode = file != null ? file.hashCode() : 1);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + sizeOfRepeatedMessage(1, file);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<FileDescriptorSet> {
     public List<FileDescriptorProto> file = Collections.emptyList();
 

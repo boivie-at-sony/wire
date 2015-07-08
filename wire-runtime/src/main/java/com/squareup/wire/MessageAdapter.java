@@ -259,7 +259,7 @@ public final class MessageAdapter<M extends Message> {
         size += getExtensionsSerializedSize(extendableMessage.extensionMap);
       }
     }
-    size += message.getUnknownFieldsSerializedSize();
+    size += message.unknownFieldsSize();
     return size;
   }
 
@@ -437,7 +437,7 @@ public final class MessageAdapter<M extends Message> {
    * Returns the serialized size in bytes of the given tag and value.
    */
   private int getSerializedSize(int tag, Object value, Datatype datatype) {
-    return WireOutput.varintTagSize(tag) + getSerializedSizeNoTag(value, datatype);
+    return WireOutput.tagSize(tag) + getSerializedSizeNoTag(value, datatype);
   }
 
   /**
@@ -449,8 +449,8 @@ public final class MessageAdapter<M extends Message> {
       case INT32: return WireOutput.int32Size((Integer) value);
       case INT64: case UINT64: return WireOutput.varint64Size((Long) value);
       case UINT32: return WireOutput.varint32Size((Integer) value);
-      case SINT32: return WireOutput.varint32Size(WireOutput.zigZag32((Integer) value));
-      case SINT64: return WireOutput.varint64Size(WireOutput.zigZag64((Long) value));
+      case SINT32: return WireOutput.varint32ZigZagSize((Integer) value);
+      case SINT64: return WireOutput.varint64ZigZagSize((Long) value);
       case BOOL: return 1;
       case ENUM: return getEnumSize((ProtoEnum) value);
       case STRING:
@@ -493,10 +493,10 @@ public final class MessageAdapter<M extends Message> {
 
   @SuppressWarnings("unchecked")
   private <MM extends Message> int getMessageSize(MM message) {
-    int size = message.cachedSerializedSize;
+    int size = message.size;
     if (size == -1) {
       MessageAdapter<MM> adapter = wire.messageAdapter((Class<MM>) message.getClass());
-      size = message.cachedSerializedSize = adapter.getSerializedSize(message);
+      size = message.size = adapter.getSerializedSize(message);
     }
     return WireOutput.varint32Size(size) + size;
   }
@@ -516,8 +516,8 @@ public final class MessageAdapter<M extends Message> {
       case INT32: output.writeSignedVarint32((Integer) value); break;
       case INT64: case UINT64: output.writeVarint64((Long) value); break;
       case UINT32: output.writeVarint32((Integer) value); break;
-      case SINT32: output.writeVarint32(WireOutput.zigZag32((Integer) value)); break;
-      case SINT64: output.writeVarint64(WireOutput.zigZag64((Long) value)); break;
+      case SINT32: output.writeVarint32ZigZag((Integer) value); break;
+      case SINT64: output.writeVarint64ZigZag((Long) value); break;
       case BOOL: output.writeRawByte((Boolean) value ? 1 : 0); break;
       case ENUM: writeEnum((ProtoEnum) value, output); break;
       case STRING:
@@ -542,9 +542,9 @@ public final class MessageAdapter<M extends Message> {
   @SuppressWarnings("unchecked")
   private <MM extends Message> void writeMessage(MM message, WireOutput output) throws IOException {
     MessageAdapter<MM> adapter = wire.messageAdapter((Class<MM>) message.getClass());
-    int size = message.cachedSerializedSize;
+    int size = message.size;
     if (size == -1) {
-      size = message.cachedSerializedSize = adapter.getSerializedSize(message);
+      size = message.size = adapter.getSerializedSize(message);
     }
     output.writeVarint32(size);
     adapter.write(message, output);

@@ -50,6 +50,17 @@ public final class ExternalMessage extends ExtendableMessage<ExternalMessage> {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (f != null ? sizeOfFloat(1, f) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends ExtendableMessage.ExtendableBuilder<ExternalMessage> {
     public Float f;
 

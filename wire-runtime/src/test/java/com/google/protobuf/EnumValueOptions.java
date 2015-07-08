@@ -53,6 +53,17 @@ public final class EnumValueOptions extends ExtendableMessage<EnumValueOptions> 
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + sizeOfRepeatedMessage(999, uninterpreted_option);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends ExtendableMessage.ExtendableBuilder<EnumValueOptions> {
     public List<UninterpretedOption> uninterpreted_option = Collections.emptyList();
 

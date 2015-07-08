@@ -54,6 +54,18 @@ public final class Recursive extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (value != null ? sizeOfInt32(1, value) : 0)
+          + (recursive != null ? sizeOfMessage(2, recursive) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<Recursive> {
     public Integer value;
 

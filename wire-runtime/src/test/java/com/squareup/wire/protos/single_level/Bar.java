@@ -41,6 +41,17 @@ public final class Bar extends Message {
     return result != 0 ? result : (hashCode = baz != null ? baz.hashCode() : 0);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (baz != null ? sizeOfInt32(1, baz) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<Bar> {
     public Integer baz;
 

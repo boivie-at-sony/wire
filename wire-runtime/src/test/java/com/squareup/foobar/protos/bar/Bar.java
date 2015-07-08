@@ -28,6 +28,16 @@ public final class Bar extends Message {
     return 0;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize();
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<Bar> {
     public Builder() {
     }
@@ -60,6 +70,16 @@ public final class Bar extends Message {
     @Override
     public int hashCode() {
       return 0;
+    }
+
+    @Override
+    public int size() {
+      int size = this.size;
+      if (size == -1) {
+        size = unknownFieldsSize();
+      }
+      this.size = size;
+      return size;
     }
 
     public static final class Builder extends com.squareup.wire.Message.Builder<Baz> {
@@ -107,6 +127,17 @@ public final class Bar extends Message {
       public int hashCode() {
         int result = hashCode;
         return result != 0 ? result : (hashCode = boo != null ? boo.hashCode() : 0);
+      }
+
+      @Override
+      public int size() {
+        int size = this.size;
+        if (size == -1) {
+          size = unknownFieldsSize()
+              + (boo != null ? sizeOfString(1, boo) : 0);
+        }
+        this.size = size;
+        return size;
       }
 
       public static final class Builder extends com.squareup.wire.Message.Builder<Moo> {

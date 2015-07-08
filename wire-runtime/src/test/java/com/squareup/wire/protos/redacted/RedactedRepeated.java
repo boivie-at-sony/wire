@@ -48,6 +48,17 @@ public final class RedactedRepeated extends Message {
     return result != 0 ? result : (hashCode = a != null ? a.hashCode() : 1);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + sizeOfRepeatedString(1, a);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<RedactedRepeated> {
     public List<String> a = Collections.emptyList();
 

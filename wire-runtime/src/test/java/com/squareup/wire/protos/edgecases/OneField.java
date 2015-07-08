@@ -41,6 +41,17 @@ public final class OneField extends Message {
     return result != 0 ? result : (hashCode = opt_int32 != null ? opt_int32.hashCode() : 0);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (opt_int32 != null ? sizeOfInt32(1, opt_int32) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<OneField> {
     public Integer opt_int32;
 

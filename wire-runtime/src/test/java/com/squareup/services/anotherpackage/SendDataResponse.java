@@ -41,6 +41,17 @@ public final class SendDataResponse extends Message {
     return result != 0 ? result : (hashCode = data != null ? data.hashCode() : 0);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (data != null ? sizeOfBytes(1, data) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<SendDataResponse> {
     public ByteString data;
 

@@ -168,6 +168,23 @@ public final class FooBar extends ExtendableMessage<FooBar> {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (foo != null ? sizeOfInt32(1, foo) : 0)
+          + (bar != null ? sizeOfString(2, bar) : 0)
+          + (baz != null ? sizeOfMessage(3, baz) : 0)
+          + (qux != null ? sizeOfUint64(4, qux) : 0)
+          + sizeOfRepeatedFloat(5, fred)
+          + (daisy != null ? sizeOfDouble(6, daisy) : 0)
+          + sizeOfRepeatedMessage(7, nested);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends ExtendableMessage.ExtendableBuilder<FooBar> {
     public Integer foo;
 
@@ -278,6 +295,17 @@ public final class FooBar extends ExtendableMessage<FooBar> {
       return result != 0 ? result : (hashCode = value != null ? value.hashCode() : 0);
     }
 
+    @Override
+    public int size() {
+      int size = this.size;
+      if (size == -1) {
+        size = unknownFieldsSize()
+            + (value != null ? sizeOfEnum(1, value) : 0);
+      }
+      this.size = size;
+      return size;
+    }
+
     public static final class Builder extends com.squareup.wire.Message.Builder<Nested> {
       public FooBarBazEnum value;
 
@@ -332,6 +360,17 @@ public final class FooBar extends ExtendableMessage<FooBar> {
     public int hashCode() {
       int result = hashCode;
       return result != 0 ? result : (hashCode = serial != null ? serial.hashCode() : 1);
+    }
+
+    @Override
+    public int size() {
+      int size = this.size;
+      if (size == -1) {
+        size = unknownFieldsSize()
+            + sizeOfRepeatedInt32(1, serial);
+      }
+      this.size = size;
+      return size;
     }
 
     public static final class Builder extends com.squareup.wire.Message.Builder<More> {

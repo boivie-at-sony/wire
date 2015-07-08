@@ -48,6 +48,17 @@ public final class RedactedRequired extends Message {
     return result != 0 ? result : (hashCode = a != null ? a.hashCode() : 0);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + sizeOfString(1, a);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<RedactedRequired> {
     public String a;
 

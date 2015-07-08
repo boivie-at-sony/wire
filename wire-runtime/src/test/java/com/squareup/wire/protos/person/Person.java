@@ -96,6 +96,20 @@ public final class Person extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + sizeOfString(1, name)
+          + sizeOfInt32(2, id)
+          + (email != null ? sizeOfString(3, email) : 0)
+          + sizeOfRepeatedMessage(4, phone);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<Person> {
     public String name;
 
@@ -236,6 +250,18 @@ public final class Person extends Message {
         hashCode = result;
       }
       return result;
+    }
+
+    @Override
+    public int size() {
+      int size = this.size;
+      if (size == -1) {
+        size = unknownFieldsSize()
+            + sizeOfString(1, number)
+            + (type != null ? sizeOfEnum(2, type) : 0);
+      }
+      this.size = size;
+      return size;
     }
 
     public static final class Builder extends com.squareup.wire.Message.Builder<PhoneNumber> {

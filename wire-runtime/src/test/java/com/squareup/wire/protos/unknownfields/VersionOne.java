@@ -41,6 +41,17 @@ public final class VersionOne extends Message {
     return result != 0 ? result : (hashCode = i != null ? i.hashCode() : 0);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (i != null ? sizeOfInt32(1, i) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<VersionOne> {
     public Integer i;
 

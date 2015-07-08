@@ -161,6 +161,25 @@ public final class FieldDescriptorProto extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (name != null ? sizeOfString(1, name) : 0)
+          + (doc != null ? sizeOfString(9, doc) : 0)
+          + (number != null ? sizeOfInt32(3, number) : 0)
+          + (label != null ? sizeOfEnum(4, label) : 0)
+          + (type != null ? sizeOfEnum(5, type) : 0)
+          + (type_name != null ? sizeOfString(6, type_name) : 0)
+          + (extendee != null ? sizeOfString(2, extendee) : 0)
+          + (default_value != null ? sizeOfString(7, default_value) : 0)
+          + (options != null ? sizeOfMessage(8, options) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<FieldDescriptorProto> {
     public String name;
 

@@ -922,6 +922,97 @@ public final class AllTypes extends ExtendableMessage<AllTypes> {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (opt_int32 != null ? sizeOfInt32(1, opt_int32) : 0)
+          + (opt_uint32 != null ? sizeOfUint32(2, opt_uint32) : 0)
+          + (opt_sint32 != null ? sizeOfSint32(3, opt_sint32) : 0)
+          + (opt_fixed32 != null ? sizeOfFixed32(4, opt_fixed32) : 0)
+          + (opt_sfixed32 != null ? sizeOfSfixed32(5, opt_sfixed32) : 0)
+          + (opt_int64 != null ? sizeOfInt64(6, opt_int64) : 0)
+          + (opt_uint64 != null ? sizeOfUint64(7, opt_uint64) : 0)
+          + (opt_sint64 != null ? sizeOfSint64(8, opt_sint64) : 0)
+          + (opt_fixed64 != null ? sizeOfFixed64(9, opt_fixed64) : 0)
+          + (opt_sfixed64 != null ? sizeOfSfixed64(10, opt_sfixed64) : 0)
+          + (opt_bool != null ? sizeOfBool(11, opt_bool) : 0)
+          + (opt_float != null ? sizeOfFloat(12, opt_float) : 0)
+          + (opt_double != null ? sizeOfDouble(13, opt_double) : 0)
+          + (opt_string != null ? sizeOfString(14, opt_string) : 0)
+          + (opt_bytes != null ? sizeOfBytes(15, opt_bytes) : 0)
+          + (opt_nested_enum != null ? sizeOfEnum(16, opt_nested_enum) : 0)
+          + (opt_nested_message != null ? sizeOfMessage(17, opt_nested_message) : 0)
+          + sizeOfInt32(101, req_int32)
+          + sizeOfUint32(102, req_uint32)
+          + sizeOfSint32(103, req_sint32)
+          + sizeOfFixed32(104, req_fixed32)
+          + sizeOfSfixed32(105, req_sfixed32)
+          + sizeOfInt64(106, req_int64)
+          + sizeOfUint64(107, req_uint64)
+          + sizeOfSint64(108, req_sint64)
+          + sizeOfFixed64(109, req_fixed64)
+          + sizeOfSfixed64(110, req_sfixed64)
+          + sizeOfBool(111, req_bool)
+          + sizeOfFloat(112, req_float)
+          + sizeOfDouble(113, req_double)
+          + sizeOfString(114, req_string)
+          + sizeOfBytes(115, req_bytes)
+          + sizeOfEnum(116, req_nested_enum)
+          + sizeOfMessage(117, req_nested_message)
+          + sizeOfRepeatedInt32(201, rep_int32)
+          + sizeOfRepeatedUint32(202, rep_uint32)
+          + sizeOfRepeatedSint32(203, rep_sint32)
+          + sizeOfRepeatedFixed32(204, rep_fixed32)
+          + sizeOfRepeatedSfixed32(205, rep_sfixed32)
+          + sizeOfRepeatedInt64(206, rep_int64)
+          + sizeOfRepeatedUint64(207, rep_uint64)
+          + sizeOfRepeatedSint64(208, rep_sint64)
+          + sizeOfRepeatedFixed64(209, rep_fixed64)
+          + sizeOfRepeatedSfixed64(210, rep_sfixed64)
+          + sizeOfRepeatedBool(211, rep_bool)
+          + sizeOfRepeatedFloat(212, rep_float)
+          + sizeOfRepeatedDouble(213, rep_double)
+          + sizeOfRepeatedString(214, rep_string)
+          + sizeOfRepeatedBytes(215, rep_bytes)
+          + sizeOfRepeatedEnum(216, rep_nested_enum)
+          + sizeOfRepeatedMessage(217, rep_nested_message)
+          + sizeOfPackedInt32(301, pack_int32)
+          + sizeOfPackedUint32(302, pack_uint32)
+          + sizeOfPackedSint32(303, pack_sint32)
+          + sizeOfPackedFixed32(304, pack_fixed32)
+          + sizeOfPackedSfixed32(305, pack_sfixed32)
+          + sizeOfPackedInt64(306, pack_int64)
+          + sizeOfPackedUint64(307, pack_uint64)
+          + sizeOfPackedSint64(308, pack_sint64)
+          + sizeOfPackedFixed64(309, pack_fixed64)
+          + sizeOfPackedSfixed64(310, pack_sfixed64)
+          + sizeOfPackedBool(311, pack_bool)
+          + sizeOfPackedFloat(312, pack_float)
+          + sizeOfPackedDouble(313, pack_double)
+          + sizeOfPackedEnum(316, pack_nested_enum)
+          + (default_int32 != null ? sizeOfInt32(401, default_int32) : 0)
+          + (default_uint32 != null ? sizeOfUint32(402, default_uint32) : 0)
+          + (default_sint32 != null ? sizeOfSint32(403, default_sint32) : 0)
+          + (default_fixed32 != null ? sizeOfFixed32(404, default_fixed32) : 0)
+          + (default_sfixed32 != null ? sizeOfSfixed32(405, default_sfixed32) : 0)
+          + (default_int64 != null ? sizeOfInt64(406, default_int64) : 0)
+          + (default_uint64 != null ? sizeOfUint64(407, default_uint64) : 0)
+          + (default_sint64 != null ? sizeOfSint64(408, default_sint64) : 0)
+          + (default_fixed64 != null ? sizeOfFixed64(409, default_fixed64) : 0)
+          + (default_sfixed64 != null ? sizeOfSfixed64(410, default_sfixed64) : 0)
+          + (default_bool != null ? sizeOfBool(411, default_bool) : 0)
+          + (default_float != null ? sizeOfFloat(412, default_float) : 0)
+          + (default_double != null ? sizeOfDouble(413, default_double) : 0)
+          + (default_string != null ? sizeOfString(414, default_string) : 0)
+          + (default_bytes != null ? sizeOfBytes(415, default_bytes) : 0)
+          + (default_nested_enum != null ? sizeOfEnum(416, default_nested_enum) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends ExtendableMessage.ExtendableBuilder<AllTypes> {
     public Integer opt_int32;
 
@@ -1672,6 +1763,17 @@ public final class AllTypes extends ExtendableMessage<AllTypes> {
     public int hashCode() {
       int result = hashCode;
       return result != 0 ? result : (hashCode = a != null ? a.hashCode() : 0);
+    }
+
+    @Override
+    public int size() {
+      int size = this.size;
+      if (size == -1) {
+        size = unknownFieldsSize()
+            + (a != null ? sizeOfInt32(1, a) : 0);
+      }
+      this.size = size;
+      return size;
     }
 
     public static final class Builder extends com.squareup.wire.Message.Builder<NestedMessage> {

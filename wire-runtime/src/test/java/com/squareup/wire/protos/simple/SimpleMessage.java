@@ -208,6 +208,28 @@ public final class SimpleMessage extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (optional_int32 != null ? sizeOfInt32(1, optional_int32) : 0)
+          + (optional_nested_msg != null ? sizeOfMessage(2, optional_nested_msg) : 0)
+          + (optional_external_msg != null ? sizeOfMessage(3, optional_external_msg) : 0)
+          + (default_nested_enum != null ? sizeOfEnum(4, default_nested_enum) : 0)
+          + sizeOfInt32(5, required_int32)
+          + sizeOfRepeatedDouble(6, repeated_double)
+          + (default_foreign_enum != null ? sizeOfEnum(7, default_foreign_enum) : 0)
+          + (no_default_foreign_enum != null ? sizeOfEnum(8, no_default_foreign_enum) : 0)
+          + (package != null ? sizeOfString(9, package) : 0)
+          + (result != null ? sizeOfString(10, result) : 0)
+          + (other != null ? sizeOfString(11, other) : 0)
+          + (o != null ? sizeOfString(12, o) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<SimpleMessage> {
     public Integer optional_int32;
 
@@ -391,6 +413,17 @@ public final class SimpleMessage extends Message {
     public int hashCode() {
       int result = hashCode;
       return result != 0 ? result : (hashCode = bb != null ? bb.hashCode() : 0);
+    }
+
+    @Override
+    public int size() {
+      int size = this.size;
+      if (size == -1) {
+        size = unknownFieldsSize()
+            + (bb != null ? sizeOfInt32(1, bb) : 0);
+      }
+      this.size = size;
+      return size;
     }
 
     public static final class Builder extends com.squareup.wire.Message.Builder<NestedMessage> {

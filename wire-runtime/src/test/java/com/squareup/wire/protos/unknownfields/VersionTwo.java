@@ -104,6 +104,22 @@ public final class VersionTwo extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (i != null ? sizeOfInt32(1, i) : 0)
+          + (v2_i != null ? sizeOfInt32(2, v2_i) : 0)
+          + (v2_s != null ? sizeOfString(3, v2_s) : 0)
+          + (v2_f32 != null ? sizeOfFixed32(4, v2_f32) : 0)
+          + (v2_f64 != null ? sizeOfFixed64(5, v2_f64) : 0)
+          + sizeOfRepeatedString(6, v2_rs);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<VersionTwo> {
     public Integer i;
 

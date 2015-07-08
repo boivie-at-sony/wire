@@ -99,10 +99,10 @@ public abstract class Message implements Serializable {
   }
 
   /** Set to null until a field is added. */
-  private transient UnknownFieldMap unknownFields;
+  protected transient UnknownFieldMap unknownFields;
 
   /** If not {@code -1} then the serialized size of this message. */
-  transient int cachedSerializedSize = -1;
+  protected transient int size = -1;
 
   /** If non-zero, the hash code of this message. Accessed by generated code. */
   protected transient int hashCode = 0;
@@ -137,9 +137,10 @@ public abstract class Message implements Serializable {
    * If {@code source} is null, {@link Collections#emptyList()} is returned.
    */
   protected static <T> List<T> immutableCopyOf(List<T> source) {
-    if (source == null) {
-      return Collections.emptyList();
-    } else if (source instanceof MessageAdapter.ImmutableList) {
+    if (source == Collections.emptyList()) {
+      return source;
+    }
+    if (source instanceof MessageAdapter.ImmutableList) {
       return source;
     }
     return Collections.unmodifiableList(new ArrayList<T>(source));
@@ -163,8 +164,8 @@ public abstract class Message implements Serializable {
     }
   }
 
-  int getUnknownFieldsSerializedSize() {
-    return unknownFields == null ? 0 : unknownFields.getSerializedSize();
+  protected int unknownFieldsSize() {
+    return unknownFields == null ? 0 : unknownFields.size();
   }
 
   protected static boolean equals(Object a, Object b) {
@@ -179,6 +180,8 @@ public abstract class Message implements Serializable {
   private Object writeReplace() throws ObjectStreamException {
     return new MessageSerializedForm(this, getClass());
   }
+
+  protected abstract int size();
 
   /**
    * Superclass for protocol buffer message builders.
@@ -296,5 +299,312 @@ public abstract class Message implements Serializable {
      * in this builder.
      */
     public abstract T build();
+  }
+
+  protected static int sizeOfBool(int tag, boolean value) {
+    return WireOutput.tagSize(tag) + 1;
+  }
+
+  protected static int sizeOfInt32(int tag, int value) {
+    return WireOutput.tagSize(tag) + (value < 0 ? 10 : WireOutput.varint32Size(value));
+  }
+
+  protected static int sizeOfUint32(int tag, int value) {
+    return WireOutput.tagSize(tag) + WireOutput.varint32Size(value);
+  }
+
+  protected static int sizeOfSint32(int tag, int value) {
+    return WireOutput.tagSize(tag) + WireOutput.varint32ZigZagSize(value);
+  }
+
+  protected static int sizeOfFixed32(int tag, int value) {
+    return WireOutput.tagSize(tag) + 4;
+  }
+
+  protected static int sizeOfSfixed32(int tag, int value) {
+    return WireOutput.tagSize(tag) + 4;
+  }
+
+  protected static int sizeOfFloat(int tag, float value) {
+    return WireOutput.tagSize(tag) + 4;
+  }
+
+  protected static int sizeOfInt64(int tag, long value) {
+    return WireOutput.tagSize(tag) + WireOutput.varint64Size(value);
+  }
+
+  protected static int sizeOfUint64(int tag, long value) {
+    return WireOutput.tagSize(tag) + WireOutput.varint64Size(value);
+  }
+
+  protected static int sizeOfSint64(int tag, long value) {
+    return WireOutput.tagSize(tag) + WireOutput.varint64ZigZagSize(value);
+  }
+
+  protected static int sizeOfFixed64(int tag, long value) {
+    return WireOutput.tagSize(tag) + 8;
+  }
+
+  protected static int sizeOfSfixed64(int tag, long value) {
+    return WireOutput.tagSize(tag) + 8;
+  }
+
+  protected static int sizeOfDouble(int tag, double value) {
+    return WireOutput.tagSize(tag) + 8;
+  }
+
+  protected static int sizeOfString(int tag, String value) {
+    int size = 0;
+    for (int i = 0, length = value.length(); i < length; i++) {
+      char ch = value.charAt(i);
+      if (ch <= 0x7F) {
+        size++;
+      } else if (ch <= 0x7FF) {
+        size += 2;
+      } else if (Character.isHighSurrogate(ch)) {
+        size += 4;
+        ++i;
+      } else {
+        size += 3;
+      }
+    }
+    return WireOutput.tagSize(tag) + WireOutput.varint32Size(size) + size;
+  }
+
+  protected  static int sizeOfBytes(int tag, ByteString value) {
+    return WireOutput.tagSize(tag) + WireOutput.varint32Size(value.size()) + value.size();
+  }
+
+  protected static int sizeOfEnum(int tag, ProtoEnum value) {
+    return WireOutput.tagSize(tag) + WireOutput.varint32Size(value.getValue());
+  }
+
+  protected static int sizeOfMessage(int tag, Message value) {
+    return WireOutput.tagSize(tag) + value.size();
+  }
+  
+  protected static int sizeOfRepeatedInt32(int tag, List<Integer> values) {
+    int count = values.size();
+    int size = count * WireOutput.tagSize(tag);
+    for (int i = 0; i < count; i++) {
+      Integer value = values.get(i);
+      size += value < 0 ? 10 : WireOutput.varint32Size(value);
+    }
+    return size;
+  }
+
+  protected static int sizeOfRepeatedUint32(int tag, List<Integer> values) {
+    int count = values.size();
+    int size = count * WireOutput.tagSize(tag);
+    for (int i = 0; i < count; i++) {
+      size += WireOutput.varint32Size(values.get(i));
+    }
+    return size;
+  }
+
+  protected static int sizeOfRepeatedSint32(int tag, List<Integer> values) {
+    int count = values.size();
+    int size = count * WireOutput.tagSize(tag);
+    for (int i = 0; i < count; i++) {
+      size += WireOutput.varint32ZigZagSize(values.get(i));
+    }
+    return size;
+  }
+
+  protected static int sizeOfRepeatedFixed32(int tag, List<Integer> values) {
+    return values.size() * (WireOutput.tagSize(tag) + 4);
+  }
+
+  protected static int sizeOfRepeatedSfixed32(int tag, List<Integer> values) {
+    return values.size() * (WireOutput.tagSize(tag) + 4);
+  }
+
+  protected static int sizeOfRepeatedInt64(int tag, List<Long> values) {
+    int count = values.size();
+    int size = count * WireOutput.tagSize(tag);
+    for (int i = 0; i < count; i++) {
+      size += WireOutput.varint64Size(values.get(i));
+    }
+    return size;
+  }
+
+  protected static int sizeOfRepeatedUint64(int tag, List<Long> values) {
+    int count = values.size();
+    int size = count * WireOutput.tagSize(tag);
+    for (int i = 0; i < count; i++) {
+      size += WireOutput.varint64Size(values.get(i));
+    }
+    return size;
+  }
+
+  protected static int sizeOfRepeatedSint64(int tag, List<Long> values) {
+    int count = values.size();
+    int size = count * WireOutput.tagSize(tag);
+    for (int i = 0; i < count; i++) {
+      size += WireOutput.varint64ZigZagSize(values.get(i));
+    }
+    return size;
+  }
+
+  protected static int sizeOfRepeatedFixed64(int tag, List<Long> values) {
+    return values.size() * (WireOutput.tagSize(tag) + 8);
+  }
+
+  protected static int sizeOfRepeatedSfixed64(int tag, List<Long> values) {
+    return values.size() * (WireOutput.tagSize(tag) + 8);
+  }
+
+  protected static int sizeOfRepeatedBool(int tag, List<Boolean> values) {
+    return values.size() * (WireOutput.tagSize(tag) + 1);
+  }
+
+  protected static int sizeOfRepeatedFloat(int tag, List<Float> values) {
+    return values.size() * (WireOutput.tagSize(tag) + 4);
+  }
+
+  protected static int sizeOfRepeatedDouble(int tag, List<Double> values) {
+    return values.size() * (WireOutput.tagSize(tag) + 8);
+  }
+
+  protected static int sizeOfRepeatedString(int tag, List<String> values) {
+    int count = values.size();
+    int size = count * WireOutput.tagSize(tag);
+    for (int i = 0; i < count; i++) {
+      String value = values.get(i);
+      size += WireOutput.varint32Size(value.length()) + value.length();
+    }
+    return size;
+  }
+
+  protected static int sizeOfRepeatedBytes(int tag, List<ByteString> values) {
+    int count = values.size();
+    int size = count * WireOutput.tagSize(tag);
+    for (int i = 0; i < count; i++) {
+      ByteString value = values.get(i);
+      size += WireOutput.varint32Size(value.size()) + value.size();
+    }
+    return size;
+  }
+
+  protected static int sizeOfRepeatedEnum(int tag, List<? extends ProtoEnum> values) {
+    int count = values.size();
+    int size = count * WireOutput.tagSize(tag);
+    for (int i = 0; i < count; i++) {
+      ProtoEnum value = values.get(i);
+      size += WireOutput.varint32Size(value.getValue());
+    }
+    return size;
+  }
+
+  protected static int sizeOfRepeatedMessage(int tag, List<? extends Message> values) {
+    int count = values.size();
+    int size = count * WireOutput.tagSize(tag);
+    for (int i = 0; i < count; i++) {
+      size += values.get(i).size();
+    }
+    return size;
+  }
+
+  protected static int sizeOfPackedInt32(int tag, List<Integer> values) {
+    int count = values.size();
+    int size = packedTagSize(tag) + WireOutput.varint32Size(count);
+    for (int i = 0; i < count; i++) {
+      Integer value = values.get(i);
+      size += value < 0 ? 10 : WireOutput.varint32Size(value);
+    }
+    return size;
+  }
+
+  protected static int sizeOfPackedUint32(int tag, List<Integer> values) {
+    int count = values.size();
+    int size = packedTagSize(tag) + WireOutput.varint32Size(count);
+    for (int i = 0; i < count; i++) {
+      size += WireOutput.varint32Size(values.get(i));
+    }
+    return size;
+  }
+
+  protected static int sizeOfPackedSint32(int tag, List<Integer> values) {
+    int count = values.size();
+    int size = packedTagSize(tag) + WireOutput.varint32Size(count);
+    for (int i = 0; i < count; i++) {
+      size += WireOutput.varint32ZigZagSize(values.get(i));
+    }
+    return size;
+  }
+
+  protected static int sizeOfPackedFixed32(int tag, List<Integer> values) {
+    int count = values.size();
+    return packedTagSize(tag) + WireOutput.varint32Size(count) + (count * 4);
+  }
+
+  protected static int sizeOfPackedSfixed32(int tag, List<Integer> values) {
+    int count = values.size();
+    return packedTagSize(tag) + WireOutput.varint32Size(count) + (count * 4);
+  }
+
+  protected static int sizeOfPackedInt64(int tag, List<Long> values) {
+    int count = values.size();
+    int size = packedTagSize(tag) + WireOutput.varint32Size(count);
+    for (int i = 0; i < count; i++) {
+      size += WireOutput.varint64Size(values.get(i));
+    }
+    return size;
+  }
+
+  protected static int sizeOfPackedUint64(int tag, List<Long> values) {
+    int count = values.size();
+    int size = packedTagSize(tag) + WireOutput.varint32Size(count);
+    for (int i = 0; i < count; i++) {
+      size += WireOutput.varint64Size(values.get(i));
+    }
+    return size;
+  }
+
+  protected static int sizeOfPackedSint64(int tag, List<Long> values) {
+    int count = values.size();
+    int size = packedTagSize(tag) + WireOutput.varint32Size(count);
+    for (int i = 0; i < count; i++) {
+      size += WireOutput.varint64ZigZagSize(values.get(i));
+    }
+    return size;
+  }
+
+  protected static int sizeOfPackedFixed64(int tag, List<Long> values) {
+    int count = values.size();
+    return packedTagSize(tag) + WireOutput.varint32Size(count) + (count * 8);
+  }
+
+  protected static int sizeOfPackedSfixed64(int tag, List<Long> values) {
+    int count = values.size();
+    return packedTagSize(tag) + WireOutput.varint32Size(count) + (count * 8);
+  }
+
+  protected static int sizeOfPackedBool(int tag, List<Boolean> values) {
+    int count = values.size();
+    return packedTagSize(tag) + WireOutput.varint32Size(count) + count;
+  }
+
+  protected static int sizeOfPackedFloat(int tag, List<Float> values) {
+    int count = values.size();
+    return packedTagSize(tag) + WireOutput.varint32Size(count) + (count * 4);
+  }
+
+  protected static int sizeOfPackedDouble(int tag, List<Double> values) {
+    int count = values.size();
+    return packedTagSize(tag) + WireOutput.varint32Size(count) + (count * 8);
+  }
+
+  protected static int sizeOfPackedEnum(int tag, List<? extends ProtoEnum> values) {
+    int count = values.size();
+    int size = packedTagSize(tag) + WireOutput.varint32Size(count);
+    for (int i = 0; i < count; i++) {
+      size += WireOutput.varint32Size(values.get(i).getValue());
+    }
+    return size;
+  }
+
+  private static int packedTagSize(int tag) {
+    return WireOutput.varint32Size(WireOutput.makeTag(tag, WireType.LENGTH_DELIMITED));
   }
 }

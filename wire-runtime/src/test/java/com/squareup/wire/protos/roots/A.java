@@ -65,6 +65,18 @@ public final class A extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (c != null ? sizeOfMessage(1, c) : 0)
+          + (d != null ? sizeOfMessage(2, d) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<A> {
     public B c;
 

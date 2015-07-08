@@ -41,6 +41,17 @@ public final class Bars extends Message {
     return result != 0 ? result : (hashCode = bars != null ? bars.hashCode() : 1);
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + sizeOfRepeatedMessage(1, bars);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<Bars> {
     public List<Bar> bars = Collections.emptyList();
 

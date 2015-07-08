@@ -124,6 +124,24 @@ public final class DescriptorProto extends Message {
     return result;
   }
 
+  @Override
+  public int size() {
+    int size = this.size;
+    if (size == -1) {
+      size = unknownFieldsSize()
+          + (name != null ? sizeOfString(1, name) : 0)
+          + (doc != null ? sizeOfString(8, doc) : 0)
+          + sizeOfRepeatedMessage(2, field)
+          + sizeOfRepeatedMessage(6, extension)
+          + sizeOfRepeatedMessage(3, nested_type)
+          + sizeOfRepeatedMessage(4, enum_type)
+          + sizeOfRepeatedMessage(5, extension_range)
+          + (options != null ? sizeOfMessage(7, options) : 0);
+    }
+    this.size = size;
+    return size;
+  }
+
   public static final class Builder extends com.squareup.wire.Message.Builder<DescriptorProto> {
     public String name;
 
@@ -253,6 +271,18 @@ public final class DescriptorProto extends Message {
         hashCode = result;
       }
       return result;
+    }
+
+    @Override
+    public int size() {
+      int size = this.size;
+      if (size == -1) {
+        size = unknownFieldsSize()
+            + (start != null ? sizeOfInt32(1, start) : 0)
+            + (end != null ? sizeOfInt32(2, end) : 0);
+      }
+      this.size = size;
+      return size;
     }
 
     public static final class Builder extends com.squareup.wire.Message.Builder<ExtensionRange> {
